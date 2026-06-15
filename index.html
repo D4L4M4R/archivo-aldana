@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Archivo Aldana — Acceso restringido</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Courier+Prime&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #1a1410;
+    color: #d4c5a0;
+    font-family: 'IM Fell English', Georgia, serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+
+  /* ── PANTALLA DE CONTRASEÑA ── */
+  #lock-screen {
+    max-width: 480px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .lock-title {
+    font-size: 13px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #8a7a5a;
+    margin-bottom: 32px;
+  }
+
+  .lock-seal {
+    width: 80px;
+    height: 80px;
+    border: 2px solid #5a4a2a;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 32px;
+    font-size: 32px;
+  }
+
+  .lock-heading {
+    font-size: 26px;
+    color: #e8d8a0;
+    margin-bottom: 8px;
+  }
+
+  .lock-sub {
+    font-size: 14px;
+    font-style: italic;
+    color: #8a7a5a;
+    margin-bottom: 40px;
+    line-height: 1.6;
+  }
+
+  .lock-input {
+    width: 100%;
+    background: #0e0c09;
+    border: 1px solid #5a4a2a;
+    color: #e8d8a0;
+    font-family: 'Courier Prime', monospace;
+    font-size: 20px;
+    letter-spacing: 6px;
+    text-align: center;
+    text-transform: uppercase;
+    padding: 14px 20px;
+    outline: none;
+    margin-bottom: 16px;
+  }
+
+  .lock-input::placeholder {
+    color: #3a3020;
+    letter-spacing: 2px;
+    font-size: 13px;
+  }
+
+  .lock-input:focus {
+    border-color: #a08040;
+  }
+
+  .lock-btn {
+    width: 100%;
+    background: #2a2010;
+    border: 1px solid #5a4a2a;
+    color: #d4c5a0;
+    font-family: 'IM Fell English', Georgia, serif;
+    font-size: 15px;
+    letter-spacing: 2px;
+    padding: 12px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+  }
+
+  .lock-btn:hover {
+    background: #3a3020;
+    border-color: #a08040;
+  }
+
+  .lock-error {
+    color: #a04030;
+    font-size: 13px;
+    font-style: italic;
+    margin-top: 12px;
+    min-height: 20px;
+  }
+
+  .lock-footer {
+    margin-top: 48px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #3a3020;
+    text-transform: uppercase;
+  }
+
+  /* ── CONTENIDO DEL ARCHIVO ── */
+  #archive {
+    display: none;
+    max-width: 680px;
+    width: 100%;
+  }
+
+  .archive-header {
+    text-align: center;
+    border-bottom: 1px solid #3a3020;
+    padding-bottom: 32px;
+    margin-bottom: 40px;
+  }
+
+  .archive-stamp {
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #6a5a3a;
+    margin-bottom: 20px;
+  }
+
+  .archive-title {
+    font-size: 32px;
+    color: #e8d8a0;
+    margin-bottom: 8px;
+  }
+
+  .archive-sub {
+    font-size: 14px;
+    font-style: italic;
+    color: #8a7a5a;
+  }
+
+  .archive-section {
+    margin-bottom: 40px;
+  }
+
+  .archive-section-title {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #6a5a3a;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #2a2010;
+  }
+
+  .archive-text {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #c4b590;
+    font-style: italic;
+  }
+
+  /* Mapa vintage simulado con SVG */
+  .map-container {
+    background: #2a1f0e;
+    border: 1px solid #5a4a2a;
+    padding: 24px;
+    margin: 24px 0;
+    position: relative;
+  }
+
+  .map-container svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .coords-box {
+    background: #0e0c09;
+    border: 1px solid #5a4a2a;
+    padding: 24px;
+    text-align: center;
+    margin: 32px 0;
+  }
+
+  .coords-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #6a5a3a;
+    margin-bottom: 16px;
+  }
+
+  .coords-value {
+    font-family: 'Courier Prime', monospace;
+    font-size: 28px;
+    color: #e8c84a;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+
+  .coords-instruction {
+    font-size: 14px;
+    font-style: italic;
+    color: #8a7a5a;
+    margin-top: 16px;
+    line-height: 1.7;
+  }
+
+  .coords-instruction strong {
+    color: #d4c5a0;
+    font-style: normal;
+  }
+
+  .archive-note {
+    background: #1a1208;
+    border-left: 3px solid #5a4a2a;
+    padding: 16px 20px;
+    margin-top: 32px;
+  }
+
+  .archive-note p {
+    font-size: 14px;
+    font-style: italic;
+    color: #8a7a5a;
+    line-height: 1.7;
+  }
+
+  .archive-footer {
+    text-align: center;
+    margin-top: 48px;
+    padding-top: 32px;
+    border-top: 1px solid #2a2010;
+  }
+
+  .archive-footer p {
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: #3a3020;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+
+<!-- ── PANTALLA DE CONTRASEÑA ── -->
+<div id="lock-screen">
+  <p class="lock-title">Archivo Aldana · Acceso restringido</p>
+
+  <div class="lock-seal">⚓</div>
+
+  <h1 class="lock-heading">Identificación requerida</h1>
+  <p class="lock-sub">
+    Este archivo contiene documentos clasificados<br>
+    del explorador Víctor Aldana (1923).<br>
+    Solo el personal autorizado puede acceder.
+  </p>
+
+  <input
+    type="password"
+    id="password-input"
+    class="lock-input"
+    placeholder="contraseña"
+    autocomplete="off"
+    autocorrect="off"
+    autocapitalize="off"
+    spellcheck="false"
+  />
+
+  <button class="lock-btn" onclick="checkPassword()">ACCEDER AL ARCHIVO</button>
+
+  <p class="lock-error" id="error-msg"></p>
+
+  <p class="lock-footer">Expediente nº 1923-VII · Las Palmas</p>
+</div>
+
+<!-- ── CONTENIDO DEL ARCHIVO ── -->
+<div id="archive">
+
+  <div class="archive-header">
+    <p class="archive-stamp">Archivo Aldana · Expediente nº 1923-VII · Confidencial</p>
+    <h1 class="archive-title">El último mapa</h1>
+    <p class="archive-sub">Documentos recuperados tras la desaparición de V. Aldana · Marzo 1923</p>
+  </div>
+
+  <div class="archive-section">
+    <p class="archive-section-title">Nota introductoria</p>
+    <p class="archive-text">
+      Este mapa fue el último que dibujó Víctor Aldana antes de partir. Lo encontraron en su camarote,
+      enrollado dentro de un tubo de latón sellado con cera roja. Nadie supo interpretarlo durante décadas.
+      Las coordenadas marcadas con la X señalan un lugar en el Atlántico que Aldana nunca llegó a nombrar en voz alta.
+    </p>
+  </div>
+
+  <div class="archive-section">
+    <p class="archive-section-title">Mapa original · Copia facsímil</p>
+
+    <div class="map-container">
+      <!-- Mapa vintage dibujado en SVG -->
+      <svg viewBox="0 0 600 380" xmlns="http://www.w3.org/2000/svg">
+        <!-- Fondo de papel envejecido -->
+        <rect width="600" height="380" fill="#2a1f0e"/>
+        <rect x="8" y="8" width="584" height="364" fill="none" stroke="#5a4a2a" stroke-width="1"/>
+        <rect x="14" y="14" width="572" height="352" fill="none" stroke="#3a2a1a" stroke-width="0.5"/>
+
+        <!-- Textura de agua (líneas horizontales suaves) -->
+        <g stroke="#1e1608" stroke-width="0.4" opacity="0.6">
+          <line x1="20" y1="40" x2="580" y2="40"/>
+          <line x1="20" y1="55" x2="580" y2="55"/>
+          <line x1="20" y1="70" x2="580" y2="70"/>
+          <line x1="20" y1="85" x2="580" y2="85"/>
+          <line x1="20" y1="100" x2="580" y2="100"/>
+          <line x1="20" y1="115" x2="580" y2="115"/>
+          <line x1="20" y1="130" x2="580" y2="130"/>
+          <line x1="20" y1="145" x2="580" y2="145"/>
+          <line x1="20" y1="160" x2="580" y2="160"/>
+          <line x1="20" y1="175" x2="580" y2="175"/>
+          <line x1="20" y1="190" x2="580" y2="190"/>
+          <line x1="20" y1="205" x2="580" y2="205"/>
+          <line x1="20" y1="220" x2="580" y2="220"/>
+          <line x1="20" y1="235" x2="580" y2="235"/>
+          <line x1="20" y1="250" x2="580" y2="250"/>
+          <line x1="20" y1="265" x2="580" y2="265"/>
+          <line x1="20" y1="280" x2="580" y2="280"/>
+          <line x1="20" y1="295" x2="580" y2="295"/>
+          <line x1="20" y1="310" x2="580" y2="310"/>
+          <line x1="20" y1="325" x2="580" y2="325"/>
+          <line x1="20" y1="340" x2="580" y2="340"/>
+          <line x1="20" y1="355" x2="580" y2="355"/>
+        </g>
+
+        <!-- Silueta de isla grande (Tenerife aproximada) -->
+        <polygon points="180,200 200,180 240,170 280,175 300,185 310,200 295,220 260,235 220,230 190,218"
+          fill="#3a2a10" stroke="#6a5a3a" stroke-width="1.5"/>
+        <text x="245" y="205" text-anchor="middle" font-family="'IM Fell English', Georgia, serif"
+          font-size="10" fill="#8a7a5a" font-style="italic">Gran Canaria</text>
+
+        <!-- Isla pequeña con la X (La Palma aproximada) -->
+        <polygon points="88,130 100,118 118,115 132,120 138,135 130,150 112,155 94,148"
+          fill="#3a2a10" stroke="#6a5a3a" stroke-width="1.5"/>
+
+        <!-- X marcada sobre La Palma -->
+        <line x1="100" y1="122" x2="126" y2="148" stroke="#e8c84a" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="126" y1="122" x2="100" y2="148" stroke="#e8c84a" stroke-width="2.5" stroke-linecap="round"/>
+
+        <!-- Punto rojo en el centro de la X -->
+        <circle cx="113" cy="135" r="4" fill="#c04030" stroke="#e8c84a" stroke-width="1"/>
+
+        <!-- Isla mediana (Lanzarote) -->
+        <polygon points="380,120 400,112 420,115 428,128 418,140 395,142 378,132"
+          fill="#3a2a10" stroke="#6a5a3a" stroke-width="1.5"/>
+        <text x="403" y="130" text-anchor="middle" font-family="'IM Fell English', Georgia, serif"
+          font-size="9" fill="#6a5a3a" font-style="italic">Lanzarote</text>
+
+        <!-- Isla pequeña (Fuerteventura) -->
+        <polygon points="440,155 455,145 470,148 475,165 465,178 448,176 438,166"
+          fill="#3a2a10" stroke="#6a5a3a" stroke-width="1.5"/>
+
+        <!-- Rosa de los vientos -->
+        <g transform="translate(520, 80)">
+          <circle cx="0" cy="0" r="28" fill="none" stroke="#4a3a1a" stroke-width="1"/>
+          <line x1="0" y1="-28" x2="0" y2="28" stroke="#4a3a1a" stroke-width="0.8"/>
+          <line x1="-28" y1="0" x2="28" y2="0" stroke="#4a3a1a" stroke-width="0.8"/>
+          <polygon points="0,-28 -5,-12 5,-12" fill="#d4c5a0"/>
+          <text x="0" y="-32" text-anchor="middle" font-family="Georgia, serif" font-size="11"
+            fill="#d4c5a0" font-weight="bold">N</text>
+          <text x="0" y="42" text-anchor="middle" font-family="Georgia, serif" font-size="9"
+            fill="#6a5a3a">S</text>
+          <text x="36" y="4" text-anchor="middle" font-family="Georgia, serif" font-size="9"
+            fill="#6a5a3a">E</text>
+          <text x="-36" y="4" text-anchor="middle" font-family="Georgia, serif" font-size="9"
+            fill="#6a5a3a">O</text>
+        </g>
+
+        <!-- Título del mapa -->
+        <text x="300" y="50" text-anchor="middle" font-family="'IM Fell English', Georgia, serif"
+          font-size="16" fill="#a09060" font-style="italic">Islas Afortunadas · Océano Atlántico</text>
+        <text x="300" y="66" text-anchor="middle" font-family="'IM Fell English', Georgia, serif"
+          font-size="10" fill="#5a4a2a">V. Aldana · 1923</text>
+
+        <!-- Líneas de coordenadas decorativas -->
+        <line x1="80" y1="20" x2="80" y2="360" stroke="#3a2a1a" stroke-width="0.5" stroke-dasharray="4 4"/>
+        <line x1="160" y1="20" x2="160" y2="360" stroke="#3a2a1a" stroke-width="0.5" stroke-dasharray="4 4"/>
+        <line x1="240" y1="20" x2="240" y2="360" stroke="#3a2a1a" stroke-width="0.5" stroke-dasharray="4 4"/>
+        <line x1="320" y1="20" x2="320" y2="360" stroke="#3a2a1a" stroke-width="0.5" stroke-dasharray="4 4"/>
+        <line x1="400" y1="20" x2="400" y2="360" stroke="#3a2a1a" stroke-width="0.5" stroke-dasharray="4 4"/>
+        <line x1="480" y1="20" x2="480" y2="360" stroke="#3a2a1a" stroke-width="0.5" stroke-dasharray="4 4"/>
+        <line x1="20" y1="130" x2="580" y2="130" stroke="#3a2a1a" stroke-width="0.5" stroke-dasharray="4 4"/>
+        <line x1="20" y1="230" x2="580" y2="230" stroke="#3a2a1a" stroke-width="0.5" stroke-dasharray="4 4"/>
+        <line x1="20" y1="310" x2="580" y2="310" stroke="#3a2a1a" stroke-width="0.5" stroke-dasharray="4 4"/>
+
+        <!-- Leyenda de la X -->
+        <line x1="140" y1="135" x2="200" y2="135" stroke="#e8c84a" stroke-width="0.8" stroke-dasharray="3 3"/>
+        <text x="205" y="131" font-family="'IM Fell English', Georgia, serif" font-size="10"
+          fill="#e8c84a" font-style="italic">Punto de interés</text>
+        <text x="205" y="143" font-family="'IM Fell English', Georgia, serif" font-size="9"
+          fill="#8a7a5a" font-style="italic">coord. registradas</text>
+
+        <!-- Texto decorativo en el agua -->
+        <text x="420" y="260" text-anchor="middle" font-family="'IM Fell English', Georgia, serif"
+          font-size="12" fill="#2a2010" font-style="italic" transform="rotate(-5, 420, 260)">Mare Oceanum</text>
+        <text x="200" y="310" text-anchor="middle" font-family="'IM Fell English', Georgia, serif"
+          font-size="10" fill="#2a2010" font-style="italic" transform="rotate(3, 200, 310)">Aquí hay dragones</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="archive-section">
+    <p class="archive-section-title">Coordenadas registradas</p>
+
+    <div class="coords-box">
+      <p class="coords-label">Posición marcada con X en el mapa · Aldana 1923</p>
+      <p class="coords-value">28.6835° N, 17.7642° W</p>
+      <p class="coords-instruction">
+        Introducid estas coordenadas exactamente así en<br>
+        <strong>Google Maps</strong> o <strong>Apple Maps</strong>.<br><br>
+        El nombre del lugar que aparece<br>
+        es vuestra siguiente clave.
+      </p>
+    </div>
+  </div>
+
+  <div class="archive-note">
+    <p>
+      "Fui el primero en poner el pie en ese lugar desde los piratas. No diré el nombre.
+      Quien llegue hasta aquí ya sabrá buscarlo."
+      <br><br>— V. Aldana, diario de a bordo, 14 de marzo de 1923
+    </p>
+  </div>
+
+  <div class="archive-footer">
+    <p>Archivo Aldana · Expediente 1923-VII · Acceso verificado</p>
+  </div>
+
+</div>
+
+<script>
+  document.getElementById('password-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') checkPassword();
+  });
+
+  function checkPassword() {
+    const input = document.getElementById('password-input').value.trim().toUpperCase();
+    const error = document.getElementById('error-msg');
+
+    if (input === 'OLIVIA') {
+      document.getElementById('lock-screen').style.display = 'none';
+      document.getElementById('archive').style.display = 'block';
+      window.scrollTo(0, 0);
+    } else {
+      error.textContent = 'Contraseña incorrecta. El archivo permanece sellado.';
+      document.getElementById('password-input').value = '';
+      document.getElementById('password-input').focus();
+    }
+  }
+</script>
+
+</body>
+</html>
