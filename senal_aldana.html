@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Señal de identificación · Archivo Aldana</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Courier+Prime&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #1a1410;
+    color: #d4c5a0;
+    font-family: 'IM Fell English', Georgia, serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+
+  .screen {
+    max-width: 480px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .stamp {
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #6a5a3a;
+    margin-bottom: 32px;
+  }
+
+  .seal {
+    width: 80px;
+    height: 80px;
+    border: 2px solid #5a4a2a;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 32px;
+    font-size: 32px;
+  }
+
+  .heading {
+    font-size: 26px;
+    color: #e8d8a0;
+    margin-bottom: 8px;
+  }
+
+  .sub {
+    font-size: 15px;
+    font-style: italic;
+    color: #8a7a5a;
+    margin-bottom: 40px;
+    line-height: 1.7;
+  }
+
+  .input-field {
+    width: 100%;
+    background: #0e0c09;
+    border: 1px solid #5a4a2a;
+    color: #e8d8a0;
+    font-family: 'Courier Prime', monospace;
+    font-size: 20px;
+    letter-spacing: 4px;
+    text-align: center;
+    text-transform: uppercase;
+    padding: 14px 20px;
+    outline: none;
+    margin-bottom: 16px;
+  }
+
+  .input-field::placeholder {
+    color: #3a3020;
+    letter-spacing: 2px;
+    font-size: 13px;
+    text-transform: none;
+  }
+
+  .input-field:focus {
+    border-color: #a08040;
+  }
+
+  .btn {
+    width: 100%;
+    background: #2a2010;
+    border: 1px solid #5a4a2a;
+    color: #d4c5a0;
+    font-family: 'IM Fell English', Georgia, serif;
+    font-size: 15px;
+    letter-spacing: 2px;
+    padding: 12px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+  }
+
+  .btn:hover {
+    background: #3a3020;
+    border-color: #a08040;
+  }
+
+  .error {
+    color: #a04030;
+    font-size: 13px;
+    font-style: italic;
+    margin-top: 12px;
+    min-height: 20px;
+  }
+
+  .footer {
+    margin-top: 48px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #3a3020;
+    text-transform: uppercase;
+  }
+
+  /* ── PANTALLA DE ÉXITO ── */
+  #success-screen {
+    display: none;
+    max-width: 520px;
+    width: 100%;
+  }
+
+  .success-header {
+    text-align: center;
+    border-bottom: 1px solid #3a3020;
+    padding-bottom: 32px;
+    margin-bottom: 40px;
+  }
+
+  .success-stamp {
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #6a5a3a;
+    margin-bottom: 16px;
+  }
+
+  .success-title {
+    font-size: 28px;
+    color: #e8d8a0;
+    margin-bottom: 8px;
+  }
+
+  .success-sub {
+    font-size: 15px;
+    font-style: italic;
+    color: #8a7a5a;
+    line-height: 1.7;
+  }
+
+  .message-box {
+    background: #0e0c09;
+    border: 1px solid #5a4a2a;
+    padding: 32px;
+    margin: 32px 0;
+    text-align: left;
+  }
+
+  .message-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #6a5a3a;
+    margin-bottom: 20px;
+  }
+
+  .message-text {
+    font-size: 16px;
+    font-style: italic;
+    color: #c4b590;
+    line-height: 1.9;
+    margin-bottom: 32px;
+  }
+
+  .divider {
+    border: none;
+    border-top: 1px solid #2a2010;
+    margin: 24px 0;
+  }
+
+  .instruction-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #6a5a3a;
+    margin-bottom: 16px;
+  }
+
+  .instruction-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .step-num {
+    font-family: 'Courier Prime', monospace;
+    font-size: 11px;
+    color: #6a5a3a;
+    min-width: 20px;
+    margin-top: 3px;
+  }
+
+  .step-text {
+    font-size: 15px;
+    color: #c4b590;
+    line-height: 1.7;
+  }
+
+  .highlight {
+    font-family: 'Courier Prime', monospace;
+    background: #1a1208;
+    border: 1px solid #3a2a1a;
+    color: #e8c84a;
+    padding: 2px 8px;
+    font-size: 14px;
+    letter-spacing: 1px;
+    display: inline-block;
+    margin: 4px 0;
+  }
+
+  .warning-box {
+    background: #1a1208;
+    border-left: 3px solid #a08040;
+    padding: 16px 20px;
+    margin-top: 8px;
+  }
+
+  .warning-text {
+    font-size: 13px;
+    font-style: italic;
+    color: #8a7a5a;
+    line-height: 1.7;
+  }
+
+  .success-footer {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid #2a2010;
+  }
+
+  .success-footer p {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #3a3020;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+
+<!-- ── PANTALLA DE IDENTIFICACIÓN ── -->
+<div class="screen" id="lock-screen">
+  <p class="stamp">Archivo Aldana · Sistema de identificación</p>
+
+  <div class="seal">⚓</div>
+
+  <h1 class="heading">Señal de identificación</h1>
+  <p class="sub">
+    Para contactar con Aldana debéis identificaros.<br>
+    Introducid la clave que habéis obtenido<br>
+    en el mapa.
+  </p>
+
+  <input
+    type="text"
+    id="code-input"
+    class="input-field"
+    placeholder="introducid la clave"
+    autocomplete="off"
+    autocorrect="off"
+    autocapitalize="characters"
+    spellcheck="false"
+  />
+
+  <button class="btn" onclick="checkCode()">ENVIAR SEÑAL</button>
+
+  <p class="error" id="error-msg"></p>
+
+  <p class="footer">Sistema de identificación · V. Aldana 1923</p>
+</div>
+
+<!-- ── PANTALLA DE ÉXITO ── -->
+<div id="success-screen">
+
+  <div class="success-header">
+    <p class="success-stamp">Identificación verificada · Acceso concedido</p>
+    <h1 class="success-title">Señal recibida</h1>
+    <p class="success-sub">
+      Aldana os está esperando.<br>
+      Seguid las instrucciones al pie de la letra.
+    </p>
+  </div>
+
+  <div class="message-box">
+    <p class="message-label">Mensaje de Aldana · Transmisión recibida</p>
+    <p class="message-text">
+      "Os he estado esperando. Sabía que llegaríais hasta aquí.<br><br>
+      Queda una sola cosa por hacer antes de que podamos hablar.
+      Necesito que me escribáis. Cuando reciba vuestro mensaje,
+      os llamaré yo mismo con lo que necesitáis saber."
+    </p>
+
+    <hr class="divider">
+
+    <p class="instruction-label">Instrucciones para contactar con Aldana</p>
+
+    <div class="instruction-step">
+      <span class="step-num">01</span>
+      <p class="step-text">
+        Abrid el correo electrónico en el móvil de Luis
+        y escribid un email a:
+        <br>
+        <span class="highlight">aldana1923@gmail.com</span>
+      </p>
+    </div>
+
+    <div class="instruction-step">
+      <span class="step-num">02</span>
+      <p class="step-text">
+        En el asunto escribid exactamente esto, en mayúsculas:
+        <br>
+        <span class="highlight">LA PALMA ENCONTRADA</span>
+      </p>
+    </div>
+
+    <div class="instruction-step">
+      <span class="step-num">03</span>
+      <p class="step-text">
+        En el cuerpo del email escribid solo vuestros nombres:
+        <br>
+        <span class="highlight">Luis y Laura</span>
+      </p>
+    </div>
+
+    <div class="instruction-step">
+      <span class="step-num">04</span>
+      <p class="step-text">
+        Enviadlo. No cerréis esta pantalla hasta haberlo enviado.
+      </p>
+    </div>
+
+    <div class="warning-box">
+      <p class="warning-text">
+        El asunto debe ser exactamente
+        <strong style="color: #d4c5a0; font-style: normal;">LA PALMA ENCONTRADA</strong>
+        — ni una letra más, ni una menos.
+        De lo contrario, Aldana no recibirá la señal.
+      </p>
+    </div>
+  </div>
+
+  <div class="success-footer">
+    <p>Señal verificada · Archivo Aldana 1923 · En espera de contacto</p>
+  </div>
+
+</div>
+
+<script>
+  document.getElementById('code-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') checkCode();
+  });
+
+  function checkCode() {
+    const input = document.getElementById('code-input').value.trim().toUpperCase();
+    const error = document.getElementById('error-msg');
+
+    // Aceptamos variantes razonables
+    const valid = ['LA PALMA', 'SANTA CRUZ DE LA PALMA', 'LA PALMA ENCONTRADA'];
+
+    if (valid.includes(input)) {
+      document.getElementById('lock-screen').style.display = 'none';
+      document.getElementById('success-screen').style.display = 'block';
+      window.scrollTo(0, 0);
+    } else {
+      error.textContent = 'Señal no reconocida. Revisad las coordenadas del mapa.';
+      document.getElementById('code-input').value = '';
+      document.getElementById('code-input').focus();
+    }
+  }
+</script>
+
+</body>
+</html>
