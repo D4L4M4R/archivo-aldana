@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Galeón de Aldana · Archivo Aldana</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Courier+Prime&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #1a1410; color: #d4c5a0; font-family: 'IM Fell English', Georgia, serif; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
+
+  .screen { max-width: 500px; width: 100%; text-align: center; }
+  .stamp { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #6a5a3a; margin-bottom: 32px; }
+  .seal { width: 80px; height: 80px; border: 2px solid #5a4a2a; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 32px; font-size: 32px; }
+  .heading { font-size: 26px; color: #e8d8a0; margin-bottom: 8px; }
+  .sub { font-size: 15px; font-style: italic; color: #8a7a5a; margin-bottom: 40px; line-height: 1.7; }
+  .input-field { width: 100%; background: #0e0c09; border: 1px solid #5a4a2a; color: #e8d8a0; font-family: 'Courier Prime', monospace; font-size: 18px; letter-spacing: 4px; text-align: center; text-transform: uppercase; padding: 14px 20px; outline: none; margin-bottom: 16px; }
+  .input-field:focus { border-color: #a08040; }
+  .btn { width: 100%; background: #2a2010; border: 1px solid #5a4a2a; color: #d4c5a0; font-family: 'IM Fell English', Georgia, serif; font-size: 15px; letter-spacing: 2px; padding: 12px; cursor: pointer; transition: background 0.2s; }
+  .btn:hover { background: #3a3020; border-color: #a08040; }
+  .error { color: #a04030; font-size: 13px; font-style: italic; margin-top: 12px; min-height: 20px; }
+  .footer-lock { margin-top: 48px; font-size: 11px; letter-spacing: 2px; color: #3a3020; text-transform: uppercase; }
+
+  #archive { display: none; max-width: 560px; width: 100%; }
+  .arch-header { text-align: center; border-bottom: 1px solid #3a3020; padding-bottom: 24px; margin-bottom: 28px; }
+  .arch-title { font-size: 26px; color: #e8d8a0; margin-bottom: 6px; }
+  .arch-sub { font-size: 13px; font-style: italic; color: #8a7a5a; }
+  .intro { font-size: 14px; font-style: italic; color: #c4b590; line-height: 1.8; margin-bottom: 24px; }
+
+  .puzzle-wrap { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+  .puzzle-grid { display: grid; grid-template-columns: repeat(3, 110px); grid-template-rows: repeat(3, 110px); gap: 3px; background: #111; border: 2px solid #5a4a2a; padding: 3px; }
+  .tile { width: 110px; height: 110px; cursor: pointer; background-size: 330px 330px; transition: transform 0.08s; }
+  .tile:hover { transform: scale(0.97); }
+  .tile.empty { background: #0a0804 !important; cursor: default; }
+  .tile.empty:hover { transform: none; }
+
+  .moves-counter { font-family: 'Courier Prime', monospace; font-size: 13px; color: #6a5a3a; letter-spacing: 2px; }
+
+  .hint-btn { background: none; border: 1px solid #3a2a1a; color: #6a5a3a; font-family: 'IM Fell English', Georgia, serif; font-size: 13px; padding: 6px 16px; cursor: pointer; }
+  .hint-btn:hover { border-color: #5a4a2a; color: #8a7a5a; }
+  #hint-img { display: none; margin-top: 12px; border: 1px solid #3a2a1a; }
+
+  #success { display: none; background: #0a0804; border: 1px solid #5a4a2a; padding: 32px; text-align: center; margin-top: 24px; }
+  .success-label { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #6a5a3a; margin-bottom: 20px; }
+  .success-msg { font-size: 15px; font-style: italic; color: #c4b590; line-height: 1.8; margin-bottom: 28px; }
+  .next-pwd-label { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #6a5a3a; margin-bottom: 12px; }
+  .next-pwd { font-family: 'Courier Prime', monospace; font-size: 30px; color: #e8c84a; letter-spacing: 4px; margin-bottom: 12px; }
+  .next-note { font-size: 13px; font-style: italic; color: #8a7a5a; }
+
+  .arch-footer { text-align: center; margin-top: 40px; padding-top: 24px; border-top: 1px solid #2a2010; font-size: 11px; letter-spacing: 2px; color: #3a3020; text-transform: uppercase; }
+</style>
+</head>
+<body>
+
+<div class="screen" id="lock-screen">
+  <p class="stamp">Archivo Aldana · Grabado del galeón</p>
+  <div class="seal">⚓</div>
+  <h1 class="heading">El galeón de Aldana</h1>
+  <p class="sub">El grabado del navío de Aldana fue destruido intencionalmente.<br>Solo quien conozca las mareas puede reconstruirlo.</p>
+  <input type="password" id="pwd" class="input-field" placeholder="contraseña" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+  <button class="btn" onclick="checkPwd()">ACCEDER AL GRABADO</button>
+  <p class="error" id="pwd-err"></p>
+  <p class="footer-lock">Grabado nº III · Archivo Aldana 1923</p>
+</div>
+
+<div id="archive">
+  <div class="arch-header">
+    <p class="stamp">Archivo Aldana · Grabado restaurado · Acceso concedido</p>
+    <h1 class="arch-title">El galeón "Los Dos Mares"</h1>
+    <p class="arch-sub">Grabado fragmentado · Restaurad la imagen deslizando las piezas</p>
+  </div>
+
+  <p class="intro">
+    "Alguien partió este grabado en nueve fragmentos y los desordenó.
+    Vosotros tenéis que recomponerlo. Deslizad las piezas hasta que el galeón
+    vuelva a navegar entero."
+  </p>
+
+  <div class="puzzle-wrap">
+    <div class="puzzle-grid" id="grid"></div>
+    <p class="moves-counter">Movimientos: <span id="moves">0</span></p>
+    <button class="hint-btn" onclick="toggleHint()">Ver referencia del grabado</button>
+    <svg id="hint-img" viewBox="0 0 330 330" xmlns="http://www.w3.org/2000/svg" width="165" height="165"></svg>
+  </div>
+
+  <div id="success">
+    <p class="success-label">Grabado restaurado · Prueba VII superada</p>
+    <p class="success-msg">
+      "El galeón navega de nuevo. Bien hecho.<br>
+      Aldana os hubiera invitado a bordo."
+    </p>
+    <p class="next-pwd-label">Contraseña para la Prueba VIII</p>
+    <p class="next-pwd">ATLANTICO</p>
+    <p class="next-note">Introducidla en el memorama de Aldana para acceder.</p>
+  </div>
+
+  <div class="arch-footer">
+    <p>Grabado nº III · Archivo Aldana 1923 · Acceso verificado</p>
+  </div>
+</div>
+
+<script>
+document.getElementById('pwd').addEventListener('keydown', e => { if (e.key === 'Enter') checkPwd(); });
+
+function checkPwd() {
+  const v = document.getElementById('pwd').value.trim().toUpperCase().replace(/\s+/g,'');
+  if (v === 'MAREAS') {
+    document.getElementById('lock-screen').style.display = 'none';
+    document.getElementById('archive').style.display = 'block';
+    window.scrollTo(0,0);
+    initPuzzle();
+  } else {
+    document.getElementById('pwd-err').textContent = 'Contraseña incorrecta. La obtuvisteis en las canciones.';
+    document.getElementById('pwd').value = '';
+  }
+}
+
+const SVG_SRC = `<svg viewBox="0 0 330 330" xmlns="http://www.w3.org/2000/svg">
+<rect width="330" height="210" fill="#080f1e"/>
+<circle cx="40" cy="22" r="1.5" fill="#fff" opacity="0.8"/>
+<circle cx="68" cy="12" r="1" fill="#fff" opacity="0.6"/>
+<circle cx="95" cy="28" r="1.5" fill="#fff" opacity="0.7"/>
+<circle cx="130" cy="8" r="1" fill="#fff" opacity="0.9"/>
+<circle cx="160" cy="18" r="1.5" fill="#fff" opacity="0.5"/>
+<circle cx="210" cy="12" r="1" fill="#fff" opacity="0.8"/>
+<circle cx="28" cy="52" r="1" fill="#fff" opacity="0.6"/>
+<circle cx="58" cy="72" r="1" fill="#fff" opacity="0.7"/>
+<circle cx="100" cy="55" r="1.5" fill="#fff" opacity="0.5"/>
+<circle cx="22" cy="90" r="1" fill="#fff" opacity="0.4"/>
+<circle cx="180" cy="40" r="1" fill="#fff" opacity="0.6"/>
+<circle cx="220" cy="30" r="1" fill="#fff" opacity="0.5"/>
+<circle cx="295" cy="48" r="28" fill="#e8d080"/>
+<circle cx="307" cy="40" r="22" fill="#080f1e"/>
+<rect x="0" y="205" width="330" height="125" fill="#0a2035"/>
+<path d="M0,208 Q20,198 40,208 Q60,218 80,208 Q100,198 120,208 Q140,218 160,208 Q180,198 200,208 Q220,218 240,208 Q260,198 280,208 Q300,218 330,208 L330,330 L0,330 Z" fill="#0c2d48"/>
+<path d="M0,228 Q25,218 50,228 Q75,238 100,228 Q125,218 150,228 Q175,238 200,228 Q225,218 250,228 Q275,238 300,228 Q315,222 330,228 L330,330 L0,330 Z" fill="#0a2840"/>
+<path d="M0,255 Q30,245 60,255 Q90,265 120,255 Q150,245 180,255 Q210,265 240,255 Q270,245 300,255 Q315,249 330,255 L330,330 L0,330 Z" fill="#082235"/>
+<line x1="72" y1="165" x2="34" y2="132" stroke="#3a2010" stroke-width="5" stroke-linecap="round"/>
+<path d="M48,162 L282,162 L300,198 L30,198 Z" fill="#3a1a05"/>
+<path d="M48,162 L282,162 L287,173 L43,173 Z" fill="#5a2a0a"/>
+<path d="M36,187 L294,187 L297,193 L33,193 Z" fill="#2a1008"/>
+<rect x="244" y="132" width="54" height="30" rx="2" fill="#4a2008"/>
+<rect x="250" y="120" width="42" height="14" rx="2" fill="#3a1806"/>
+<rect x="254" y="136" width="10" height="8" rx="2" fill="#e8c060" opacity="0.7"/>
+<rect x="272" y="136" width="10" height="8" rx="2" fill="#e8c060" opacity="0.7"/>
+<rect x="288" y="136" width="8" height="8" rx="2" fill="#e8c060" opacity="0.5"/>
+<path d="M46,148 L93,148 L88,162 L48,162 Z" fill="#4a2008"/>
+<rect x="155" y="45" width="6" height="120" fill="#2a1505" rx="2"/>
+<rect x="116" y="78" width="5" height="88" fill="#2a1505" rx="2"/>
+<rect x="116" y="92" width="52" height="4" fill="#2a1505" rx="2"/>
+<rect x="118" y="77" width="78" height="5" fill="#2a1505" rx="2"/>
+<polygon points="161,50 198,82 197,158 118,158 120,82" fill="#d8d0b8" stroke="#b0a890" stroke-width="1"/>
+<line x1="120" y1="82" x2="198" y2="82" stroke="#a09880" stroke-width="1" opacity="0.6"/>
+<line x1="119" y1="118" x2="197" y2="118" stroke="#a09880" stroke-width="1" opacity="0.6"/>
+<polygon points="121,82 147,94 146,160 96,160 97,94" fill="#c8c0a8" stroke="#a09880" stroke-width="1"/>
+<line x1="97" y1="94" x2="147" y2="94" stroke="#a09880" stroke-width="0.8" opacity="0.5"/>
+<line x1="96" y1="128" x2="146" y2="128" stroke="#a09880" stroke-width="0.8" opacity="0.5"/>
+<polygon points="36,135 118,70 118,160 48,165" fill="#b8b098" stroke="#a09880" stroke-width="0.8"/>
+<rect x="144" y="56" width="24" height="12" rx="3" fill="#3a1a06"/>
+<rect x="146" y="46" width="20" height="12" rx="2" fill="#2a1404"/>
+<rect x="161" y="45" width="34" height="24" fill="#111"/>
+<circle cx="175" cy="52" r="8" fill="none" stroke="#ccc" stroke-width="1.5"/>
+<line x1="167" y1="52" x2="183" y2="52" stroke="#ccc" stroke-width="1.5"/>
+<line x1="175" y1="44" x2="175" y2="60" stroke="#ccc" stroke-width="1.5"/>
+<circle cx="175" cy="57" r="3" fill="#ccc"/>
+<circle cx="93" cy="178" r="5" fill="#1a0a02"/>
+<circle cx="130" cy="178" r="5" fill="#1a0a02"/>
+<circle cx="167" cy="178" r="5" fill="#1a0a02"/>
+<circle cx="204" cy="178" r="5" fill="#1a0a02"/>
+<circle cx="241" cy="178" r="5" fill="#1a0a02"/>
+<path d="M48,188 Q40,202 36,218" stroke="#4a3020" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+<line x1="36" y1="133" x2="158" y2="47" stroke="#7a6040" stroke-width="1.2" opacity="0.7"/>
+<line x1="36" y1="133" x2="119" y2="70" stroke="#7a6040" stroke-width="1" opacity="0.6"/>
+<line x1="158" y1="47" x2="119" y2="70" stroke="#7a6040" stroke-width="0.8" opacity="0.5"/>
+<line x1="198" y1="82" x2="298" y2="120" stroke="#7a6040" stroke-width="1" opacity="0.5"/>
+<line x1="158" y1="47" x2="298" y2="120" stroke="#7a6040" stroke-width="0.8" opacity="0.4"/>
+<ellipse cx="168" cy="222" rx="32" ry="8" fill="#e8d080" opacity="0.15"/>
+<ellipse cx="168" cy="244" rx="20" ry="5" fill="#e8d080" opacity="0.08"/>
+</svg>`;
+
+const svgUrl = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(SVG_SRC);
+
+let state = [0,1,2,3,4,5,6,7,8];
+let moves = 0;
+const EMPTY = 8;
+const TILE_SIZE = 110;
+const COLS = 3;
+
+const NEIGHBORS = {
+  0:[1,3], 1:[0,2,4], 2:[1,5],
+  3:[0,4,6], 4:[1,3,5,7], 5:[2,4,8],
+  6:[3,7], 7:[4,6,8], 8:[5,7]
+};
+
+function getEmptyPos() { return state.indexOf(EMPTY); }
+function isSolved() { return state.every((v,i) => v===i); }
+
+function shuffle() {
+  for (let i = 0; i < 250; i++) {
+    const ep = getEmptyPos();
+    const nbrs = NEIGHBORS[ep];
+    const pick = nbrs[Math.floor(Math.random() * nbrs.length)];
+    [state[ep], state[pick]] = [state[pick], state[ep]];
+  }
+  if (isSolved()) shuffle();
+}
+
+function slide(pos) {
+  const ep = getEmptyPos();
+  if (!NEIGHBORS[ep].includes(pos)) return;
+  [state[pos], state[ep]] = [state[ep], state[pos]];
+  moves++;
+  document.getElementById('moves').textContent = moves;
+  render();
+  if (isSolved()) {
+    setTimeout(() => {
+      document.getElementById('success').style.display = 'block';
+      document.getElementById('success').scrollIntoView({ behavior: 'smooth' });
+    }, 400);
+  }
+}
+
+function render() {
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  for (let i = 0; i < 9; i++) {
+    const tile = document.createElement('div');
+    tile.className = 'tile';
+    const val = state[i];
+    if (val === EMPTY) {
+      tile.classList.add('empty');
+    } else {
+      const row = Math.floor(val / COLS);
+      const col = val % COLS;
+      tile.style.backgroundImage = `url("${svgUrl}")`;
+      tile.style.backgroundSize = `${TILE_SIZE * COLS}px ${TILE_SIZE * COLS}px`;
+      tile.style.backgroundPosition = `-${col * TILE_SIZE}px -${row * TILE_SIZE}px`;
+      tile.addEventListener('click', () => slide(i));
+    }
+    grid.appendChild(tile);
+  }
+}
+
+function initPuzzle() {
+  state = [0,1,2,3,4,5,6,7,8];
+  moves = 0;
+  shuffle();
+  render();
+
+  const hint = document.getElementById('hint-img');
+  hint.innerHTML = SVG_SRC.replace(/<svg[^>]*>/, '').replace('</svg>', '');
+}
+
+function toggleHint() {
+  const hint = document.getElementById('hint-img');
+  hint.style.display = hint.style.display === 'none' ? 'block' : 'none';
+}
+</script>
+</body>
+</html>
