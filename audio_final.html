@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El mensaje de Aldana · Archivo Aldana</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Courier+Prime&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0a0804; color: #d4c5a0; font-family: 'IM Fell English', Georgia, serif; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
+
+  .screen { max-width: 500px; width: 100%; text-align: center; }
+  .stamp { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #6a5a3a; margin-bottom: 32px; }
+  .seal { width: 80px; height: 80px; border: 2px solid #5a4a2a; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 32px; font-size: 32px; }
+  .heading { font-size: 26px; color: #e8d8a0; margin-bottom: 8px; }
+  .sub { font-size: 15px; font-style: italic; color: #8a7a5a; margin-bottom: 40px; line-height: 1.7; }
+  .input-field { width: 100%; background: #060402; border: 1px solid #5a4a2a; color: #e8d8a0; font-family: 'Courier Prime', monospace; font-size: 18px; letter-spacing: 4px; text-align: center; text-transform: uppercase; padding: 14px 20px; outline: none; margin-bottom: 16px; }
+  .input-field:focus { border-color: #a08040; }
+  .btn { width: 100%; background: #1a1208; border: 1px solid #5a4a2a; color: #d4c5a0; font-family: 'IM Fell English', Georgia, serif; font-size: 15px; letter-spacing: 2px; padding: 12px; cursor: pointer; transition: background 0.2s; }
+  .btn:hover { background: #2a1e0c; border-color: #a08040; }
+  .lock-err { color: #a04030; font-size: 13px; font-style: italic; margin-top: 12px; min-height: 20px; }
+  .footer-lock { margin-top: 48px; font-size: 11px; letter-spacing: 2px; color: #3a3020; text-transform: uppercase; }
+
+  #archive { display: none; max-width: 520px; width: 100%; }
+
+  .arch-header { text-align: center; border-bottom: 1px solid #3a3020; padding-bottom: 28px; margin-bottom: 36px; }
+  .arch-title { font-size: 28px; color: #e8d8a0; margin-bottom: 8px; }
+  .arch-sub { font-size: 13px; font-style: italic; color: #8a7a5a; }
+
+  .intro { font-size: 15px; font-style: italic; color: #c4b590; line-height: 1.9; margin-bottom: 32px; }
+
+  .player-wrap { background: #060402; border: 1px solid #5a4a2a; padding: 36px 28px; margin-bottom: 32px; }
+  .player-icon { font-size: 48px; margin-bottom: 20px; opacity: 0.7; }
+  .player-label { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #6a5a3a; margin-bottom: 20px; }
+
+  audio {
+    width: 100%;
+    outline: none;
+    filter: invert(0.85) sepia(0.3) hue-rotate(180deg);
+    margin-bottom: 16px;
+  }
+
+  .player-note { font-size: 13px; font-style: italic; color: #6a5a3a; line-height: 1.7; }
+
+  .warning-box { background: #1a1208; border-left: 3px solid #a08040; padding: 16px 20px; margin-bottom: 32px; }
+  .warning-text { font-size: 14px; font-style: italic; color: #8a7a5a; line-height: 1.8; }
+  .warning-text strong { color: #d4c5a0; font-style: normal; }
+
+  .arch-footer { text-align: center; margin-top: 40px; padding-top: 24px; border-top: 1px solid #2a2010; font-size: 11px; letter-spacing: 2px; color: #3a3020; text-transform: uppercase; }
+</style>
+</head>
+<body>
+
+<div class="screen" id="lock-screen">
+  <p class="stamp">Archivo Aldana · Registro sonoro · Acceso final</p>
+  <div class="seal">📻</div>
+  <h1 class="heading">El mensaje de Aldana</h1>
+  <p class="sub">
+    Solo quien haya completado los cinco niveles<br>
+    merece escuchar lo que Aldana tiene que decir.
+  </p>
+  <input type="password" id="pwd" class="input-field" placeholder="contraseña final" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+  <button class="btn" onclick="checkPwd()">ACCEDER AL REGISTRO</button>
+  <p class="lock-err" id="pwd-err"></p>
+  <p class="footer-lock">Registro sonoro nº I · V. Aldana 1923</p>
+</div>
+
+<div id="archive">
+  <div class="arch-header">
+    <p class="stamp">Archivo Aldana · Registro sonoro · Acceso concedido</p>
+    <h1 class="arch-title">El mensaje de Aldana</h1>
+    <p class="arch-sub">Grabación recuperada · Santa Cruz de La Palma · 1923</p>
+  </div>
+
+  <p class="intro">
+    "Grabé esto antes de partir. No sabía si alguien lo escucharía algún día.
+    Si estás oyendo esto, es que has llegado hasta el final.
+    Eso significa que mereces saber lo que hay en el cofre."
+  </p>
+
+  <div class="player-wrap">
+    <div class="player-icon">🎙</div>
+    <p class="player-label">Mensaje de Víctor Aldana · Marzo 1923</p>
+    <audio id="player" controls preload="none">
+      <source src="[ URL DEL AUDIO — reemplaza esto antes de subir ]" type="audio/mpeg">
+      Tu navegador no soporta audio HTML5.
+    </audio>
+    <p class="player-note">
+      Escuchad el mensaje completo.<br>
+      Aldana os dará el código del cofre.
+    </p>
+  </div>
+
+  <div class="warning-box">
+    <p class="warning-text">
+      Escuchad el mensaje <strong>hasta el final</strong> antes de intentar abrir el cofre.<br>
+      El código lo dice Aldana, no está escrito en ningún sitio.
+    </p>
+  </div>
+
+  <div class="arch-footer">
+    <p>Registro sonoro nº I · Archivo Aldana 1923 · Acceso verificado · Fin del archivo</p>
+  </div>
+</div>
+
+<script>
+document.getElementById('pwd').addEventListener('keydown', e => { if (e.key === 'Enter') checkPwd(); });
+
+function checkPwd() {
+  const v = document.getElementById('pwd').value.trim().toUpperCase().replace(/\s+/g,'');
+  if (v === 'ALDANA1923') {
+    document.getElementById('lock-screen').style.display = 'none';
+    document.getElementById('archive').style.display = 'block';
+    window.scrollTo(0, 0);
+  } else {
+    document.getElementById('pwd-err').textContent = 'Contraseña incorrecta. La obtuvisteis en el memorama.';
+    document.getElementById('pwd').value = '';
+  }
+}
+</script>
+</body>
+</html>
