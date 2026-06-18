@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Memoria del Pirata · Archivo Aldana</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Courier+Prime&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #1a1410; color: #d4c5a0; font-family: 'IM Fell English', Georgia, serif; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+
+  .screen { max-width: 500px; width: 100%; text-align: center; }
+  .stamp { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #6a5a3a; margin-bottom: 32px; }
+  .seal { width: 80px; height: 80px; border: 2px solid #5a4a2a; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 32px; font-size: 32px; }
+  .heading { font-size: 26px; color: #e8d8a0; margin-bottom: 8px; }
+  .sub { font-size: 15px; font-style: italic; color: #8a7a5a; margin-bottom: 40px; line-height: 1.7; }
+  .input-field { width: 100%; background: #0e0c09; border: 1px solid #5a4a2a; color: #e8d8a0; font-family: 'Courier Prime', monospace; font-size: 18px; letter-spacing: 4px; text-align: center; text-transform: uppercase; padding: 14px 20px; outline: none; margin-bottom: 16px; }
+  .input-field:focus { border-color: #a08040; }
+  .btn { width: 100%; background: #2a2010; border: 1px solid #5a4a2a; color: #d4c5a0; font-family: 'IM Fell English', Georgia, serif; font-size: 15px; letter-spacing: 2px; padding: 12px; cursor: pointer; transition: background 0.2s; }
+  .btn:hover { background: #3a3020; border-color: #a08040; }
+  .lock-err { color: #a04030; font-size: 13px; font-style: italic; margin-top: 12px; min-height: 20px; }
+  .footer-lock { margin-top: 48px; font-size: 11px; letter-spacing: 2px; color: #3a3020; text-transform: uppercase; }
+
+  #game { display: none; max-width: 560px; width: 100%; }
+  .game-header { text-align: center; border-bottom: 1px solid #3a3020; padding-bottom: 20px; margin-bottom: 24px; }
+  .game-title { font-size: 24px; color: #e8d8a0; margin-bottom: 6px; }
+  .game-sub { font-size: 13px; font-style: italic; color: #8a7a5a; }
+
+  .level-bar { display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 16px; }
+  .level-dots { display: flex; gap: 8px; }
+  .level-dot { width: 10px; height: 10px; border-radius: 50%; border: 1px solid #5a4a2a; background: #1a1410; transition: background 0.3s; }
+  .level-dot.done { background: #e8c84a; border-color: #e8c84a; }
+  .level-dot.current { background: #a08040; border-color: #a08040; }
+  .level-label { font-family: 'Courier Prime', monospace; font-size: 13px; color: #8a7a5a; }
+
+  .status-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; font-family: 'Courier Prime', monospace; font-size: 12px; color: #6a5a3a; letter-spacing: 1px; }
+
+  .grid { display: grid; gap: 6px; margin-bottom: 20px; }
+
+  .card { aspect-ratio: 3 / 4; cursor: pointer; perspective: 700px; min-height: 60px; }
+  .card-inner { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.32s ease; }
+  .card.flipped .card-inner, .card.matched .card-inner { transform: rotateY(180deg); }
+  .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: 5px; display: flex; align-items: center; justify-content: center; }
+  .card-back-f { background: #0e0c09; border: 1.5px solid #3a2a1a; font-size: 1.5em; color: #2a1a08; }
+  .card-back-f::after { content: '⚓'; }
+  .card-front-f { transform: rotateY(180deg); border: 1.5px solid #6a5a3a; font-size: clamp(1.2em, 4vw, 2em); }
+  .card.matched .card-front-f { border-color: #4a9a4a; opacity: 0.7; }
+  .card:not(.flipped):not(.matched):hover .card-inner { transform: scale(0.95); }
+
+  .msg-overlay { text-align: center; padding: 24px; background: #0a0804; border: 1px solid #5a4a2a; margin-bottom: 20px; display: none; }
+  .msg-title { font-size: 22px; color: #e8c84a; margin-bottom: 8px; }
+  .msg-sub { font-size: 14px; font-style: italic; color: #8a7a5a; margin-bottom: 20px; }
+  .next-btn { background: #1a1208; border: 1px solid #a08040; color: #e8c84a; font-family: 'IM Fell English', Georgia, serif; font-size: 15px; letter-spacing: 2px; padding: 12px 32px; cursor: pointer; }
+  .next-btn:hover { background: #2a1e0c; }
+
+  #final { display: none; background: #0a0804; border: 1px solid #5a4a2a; padding: 32px; text-align: center; }
+  .final-label { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #6a5a3a; margin-bottom: 20px; }
+  .final-msg { font-size: 15px; font-style: italic; color: #c4b590; line-height: 1.9; margin-bottom: 28px; }
+  .pwd-label { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #6a5a3a; margin-bottom: 12px; }
+  .pwd-val { font-family: 'Courier Prime', monospace; font-size: 30px; color: #e8c84a; letter-spacing: 4px; margin-bottom: 12px; }
+  .pwd-note { font-size: 13px; font-style: italic; color: #8a7a5a; }
+
+  .arch-footer { text-align: center; margin-top: 36px; padding-top: 20px; border-top: 1px solid #2a2010; font-size: 11px; letter-spacing: 2px; color: #3a3020; text-transform: uppercase; }
+</style>
+</head>
+<body>
+
+<div class="screen" id="lock-screen">
+  <p class="stamp">Archivo Aldana · Prueba de memoria</p>
+  <div class="seal">☠</div>
+  <h1 class="heading">La memoria del pirata</h1>
+  <p class="sub">Los marinos entrenaban la memoria como un músculo.<br>Aldana dejó cinco retos antes de revelar su secreto.</p>
+  <input type="password" id="pwd" class="input-field" placeholder="contraseña" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+  <button class="btn" onclick="checkPwd()">ACCEDER AL RETO</button>
+  <p class="lock-err" id="pwd-err"></p>
+  <p class="footer-lock">Prueba de memoria · V. Aldana 1923</p>
+</div>
+
+<div id="game">
+  <div class="game-header">
+    <p class="stamp">Archivo Aldana · Prueba de memoria · En curso</p>
+    <h1 class="game-title">La memoria del pirata</h1>
+    <p class="game-sub" id="game-sub">Encontrad todas las parejas para superar el nivel</p>
+  </div>
+
+  <div class="level-bar">
+    <span class="level-label">Nivel</span>
+    <div class="level-dots" id="level-dots"></div>
+    <span class="level-label" id="level-num">1 de 5</span>
+  </div>
+
+  <div class="status-bar">
+    <span>Parejas: <span id="pairs-found">0</span> / <span id="pairs-total">3</span></span>
+    <span>Intentos: <span id="attempts">0</span></span>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <div class="msg-overlay" id="msg-overlay">
+    <p class="msg-title" id="msg-title"></p>
+    <p class="msg-sub" id="msg-sub-text"></p>
+    <button class="next-btn" id="next-btn" onclick="nextLevel()"></button>
+  </div>
+
+  <div id="final">
+    <p class="final-label">Cinco niveles superados · Prueba VIII completada</p>
+    <p class="final-msg">
+      "Vuestra memoria es digna de los mejores navegantes del Atlántico.<br>
+      Aldana os habría reclutado en su tripulación sin dudarlo.<br><br>
+      Solo queda un paso. El último."
+    </p>
+    <p class="pwd-label">Contraseña para el paso final</p>
+    <p class="pwd-val">ALDANA1923</p>
+    <p class="pwd-note">Introducidla en el archivo de audio de Aldana.</p>
+  </div>
+
+  <div class="arch-footer">
+    <p>Prueba de memoria · Archivo Aldana 1923</p>
+  </div>
+</div>
+
+<script>
+document.getElementById('pwd').addEventListener('keydown', e => { if (e.key === 'Enter') checkPwd(); });
+
+function checkPwd() {
+  const v = document.getElementById('pwd').value.trim().toUpperCase().replace(/\s+/g,'');
+  if (v === 'ATLANTICO') {
+    document.getElementById('lock-screen').style.display = 'none';
+    document.getElementById('game').style.display = 'block';
+    window.scrollTo(0,0);
+    startGame();
+  } else {
+    document.getElementById('pwd-err').textContent = 'Contraseña incorrecta. La obtuvisteis en el puzzle.';
+    document.getElementById('pwd').value = '';
+  }
+}
+
+const SYMBOLS = [
+  { sym: '⚓', bg: '#0a1a2a' },
+  { sym: '☠', bg: '#2a0a0a' },
+  { sym: '⚔', bg: '#1a0e04' },
+  { sym: '⛵', bg: '#041a2a' },
+  { sym: '🧭', bg: '#1a1a04' },
+  { sym: '📜', bg: '#2a1804' },
+  { sym: '💎', bg: '#04102a' },
+  { sym: '🌊', bg: '#041a1a' },
+  { sym: '🔭', bg: '#0a0a2a' },
+  { sym: '🗝', bg: '#1a0a10' },
+];
+
+const LEVEL_PAIRS   = [3, 4, 6, 8, 10];
+const LEVEL_COLS    = [3, 4, 4, 4, 5];
+const LEVEL_QUOTES = [
+  'El primer reto está superado. Los mares de Aldana guardan cuatro más.',
+  'Segundo nivel completado. Vuestras mentes avanzan.',
+  'Tercer nivel. A mitad del Atlántico. Seguid.',
+  'Cuarto nivel. La costa ya se ve en el horizonte.',
+  '¡Quinto y último! Habéis cruzado el Atlántico entero.',
+];
+
+let currentLevel = 0;
+let cards = [];
+let flippedIdxs = [];
+let matchedCount = 0;
+let attempts = 0;
+let locked = false;
+
+function startGame() {
+  currentLevel = 0;
+  initLevel();
+}
+
+function initLevel() {
+  const pairs = LEVEL_PAIRS[currentLevel];
+  const syms = SYMBOLS.slice(0, pairs);
+  cards = [...syms.map((s,i) => ({...s, uid: i})), ...syms.map((s,i) => ({...s, uid: i}))]
+    .map((c, i) => ({ ...c, idx: i, flipped: false, matched: false }));
+  for (let i = cards.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [cards[i], cards[j]] = [cards[j], cards[i]];
+  }
+  flippedIdxs = [];
+  matchedCount = 0;
+  attempts = 0;
+  locked = false;
+
+  updateLevelUI();
+  renderGrid();
+  document.getElementById('msg-overlay').style.display = 'none';
+  document.getElementById('final').style.display = 'none';
+}
+
+function updateLevelUI() {
+  const pairs = LEVEL_PAIRS[currentLevel];
+  document.getElementById('level-num').textContent = `${currentLevel + 1} de 5`;
+  document.getElementById('pairs-total').textContent = pairs;
+  document.getElementById('pairs-found').textContent = matchedCount;
+  document.getElementById('attempts').textContent = attempts;
+
+  const dots = document.getElementById('level-dots');
+  dots.innerHTML = '';
+  for (let i = 0; i < 5; i++) {
+    const d = document.createElement('div');
+    d.className = 'level-dot' + (i < currentLevel ? ' done' : i === currentLevel ? ' current' : '');
+    dots.appendChild(d);
+  }
+}
+
+function renderGrid() {
+  const grid = document.getElementById('grid');
+  const cols = LEVEL_COLS[currentLevel];
+  grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+  grid.innerHTML = '';
+  cards.forEach((card, i) => {
+    const el = document.createElement('div');
+    el.className = 'card' + (card.flipped ? ' flipped' : '') + (card.matched ? ' matched' : '');
+    el.innerHTML = `<div class="card-inner">
+      <div class="card-face card-back-f"></div>
+      <div class="card-face card-front-f" style="background:${card.bg}">${card.sym}</div>
+    </div>`;
+    if (!card.matched) el.addEventListener('click', () => flipCard(i));
+    grid.appendChild(el);
+  });
+}
+
+function flipCard(i) {
+  if (locked) return;
+  if (cards[i].flipped || cards[i].matched) return;
+  if (flippedIdxs.length >= 2) return;
+
+  cards[i].flipped = true;
+  flippedIdxs.push(i);
+  updateCardEl(i);
+
+  if (flippedIdxs.length === 2) {
+    attempts++;
+    locked = true;
+    document.getElementById('attempts').textContent = attempts;
+    setTimeout(checkMatch, 900);
+  }
+}
+
+function checkMatch() {
+  const [a, b] = flippedIdxs;
+  if (cards[a].uid === cards[b].uid) {
+    cards[a].matched = cards[b].matched = true;
+    matchedCount++;
+    document.getElementById('pairs-found').textContent = matchedCount;
+    flippedIdxs = [];
+    locked = false;
+    updateCardEl(a);
+    updateCardEl(b);
+    if (matchedCount === LEVEL_PAIRS[currentLevel]) {
+      setTimeout(showLevelComplete, 500);
+    }
+  } else {
+    cards[a].flipped = cards[b].flipped = false;
+    flippedIdxs = [];
+    locked = false;
+    updateCardEl(a);
+    updateCardEl(b);
+  }
+}
+
+function updateCardEl(i) {
+  const grid = document.getElementById('grid');
+  const el = grid.children[i];
+  if (!el) return;
+  el.className = 'card' + (cards[i].flipped ? ' flipped' : '') + (cards[i].matched ? ' matched' : '');
+}
+
+function showLevelComplete() {
+  const overlay = document.getElementById('msg-overlay');
+  document.getElementById('msg-title').textContent = currentLevel === 4 ? '¡Cinco niveles superados!' : `Nivel ${currentLevel + 1} superado`;
+  document.getElementById('msg-sub-text').textContent = LEVEL_QUOTES[currentLevel];
+  const btn = document.getElementById('next-btn');
+  if (currentLevel === 4) {
+    btn.textContent = 'VER LA CLAVE FINAL';
+  } else {
+    btn.textContent = `NIVEL ${currentLevel + 2} →`;
+  }
+  overlay.style.display = 'block';
+  overlay.scrollIntoView({ behavior: 'smooth' });
+}
+
+function nextLevel() {
+  document.getElementById('msg-overlay').style.display = 'none';
+  if (currentLevel === 4) {
+    document.getElementById('grid').style.display = 'none';
+    document.getElementById('final').style.display = 'block';
+    document.getElementById('final').scrollIntoView({ behavior: 'smooth' });
+  } else {
+    currentLevel++;
+    initLevel();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+</script>
+</body>
+</html>
