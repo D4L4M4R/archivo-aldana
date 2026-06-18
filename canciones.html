@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Las Canciones del Atlántico · Archivo Aldana</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Courier+Prime&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #1a1410; color: #d4c5a0; font-family: 'IM Fell English', Georgia, serif; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
+
+  .screen { max-width: 500px; width: 100%; text-align: center; }
+  .stamp { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #6a5a3a; margin-bottom: 32px; }
+  .seal { width: 80px; height: 80px; border: 2px solid #5a4a2a; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 32px; font-size: 32px; }
+  .heading { font-size: 26px; color: #e8d8a0; margin-bottom: 8px; }
+  .sub { font-size: 15px; font-style: italic; color: #8a7a5a; margin-bottom: 40px; line-height: 1.7; }
+  .input-field { width: 100%; background: #0e0c09; border: 1px solid #5a4a2a; color: #e8d8a0; font-family: 'Courier Prime', monospace; font-size: 18px; letter-spacing: 4px; text-align: center; text-transform: uppercase; padding: 14px 20px; outline: none; margin-bottom: 16px; }
+  .input-field:focus { border-color: #a08040; }
+  .btn { width: 100%; background: #2a2010; border: 1px solid #5a4a2a; color: #d4c5a0; font-family: 'IM Fell English', Georgia, serif; font-size: 15px; letter-spacing: 2px; padding: 12px; cursor: pointer; transition: background 0.2s; }
+  .btn:hover { background: #3a3020; border-color: #a08040; }
+  .error { color: #a04030; font-size: 13px; font-style: italic; margin-top: 12px; min-height: 20px; }
+  .footer-lock { margin-top: 48px; font-size: 11px; letter-spacing: 2px; color: #3a3020; text-transform: uppercase; }
+
+  #archive { display: none; max-width: 640px; width: 100%; }
+  .arch-header { text-align: center; border-bottom: 1px solid #3a3020; padding-bottom: 28px; margin-bottom: 32px; }
+  .arch-title { font-size: 28px; color: #e8d8a0; margin-bottom: 8px; }
+  .arch-sub { font-size: 14px; font-style: italic; color: #8a7a5a; }
+  .intro { font-size: 15px; font-style: italic; color: #c4b590; line-height: 1.8; margin-bottom: 28px; }
+
+  .song-row { background: #0e0c09; border: 1px solid #3a2a1a; padding: 20px; margin-bottom: 16px; }
+  .song-num { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #6a5a3a; margin-bottom: 12px; }
+  .song-link { display: inline-block; background: #1DB954; color: #000; font-family: 'Courier Prime', monospace; font-size: 13px; padding: 8px 16px; text-decoration: none; margin-bottom: 14px; font-weight: bold; }
+  .song-link:hover { background: #1ed760; }
+  .year-row { display: flex; align-items: center; gap: 12px; }
+  .year-label { font-size: 13px; color: #8a7a5a; font-style: italic; white-space: nowrap; }
+  .year-input { flex: 1; background: #0a0804; border: 1px solid #5a4a2a; color: #e8d8a0; font-family: 'Courier Prime', monospace; font-size: 20px; text-align: center; padding: 8px; outline: none; max-width: 120px; }
+  .year-input:focus { border-color: #a08040; }
+  .year-ok { font-size: 18px; min-width: 24px; }
+
+  .divider { border: none; border-top: 1px solid #2a2010; margin: 32px 0; }
+
+  .final-section { background: #0e0c09; border: 1px solid #5a4a2a; padding: 24px; margin-bottom: 24px; }
+  .final-label { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #6a5a3a; margin-bottom: 12px; }
+  .final-desc { font-size: 14px; font-style: italic; color: #8a7a5a; margin-bottom: 16px; line-height: 1.7; }
+  .final-input { width: 100%; background: #0a0804; border: 1px solid #5a4a2a; color: #e8d8a0; font-family: 'Courier Prime', monospace; font-size: 24px; letter-spacing: 4px; text-align: center; padding: 12px; outline: none; margin-bottom: 16px; }
+  .final-input:focus { border-color: #a08040; }
+  .validate-btn { width: 100%; background: #1a1208; border: 1px solid #a08040; color: #e8c84a; font-family: 'IM Fell English', Georgia, serif; font-size: 15px; letter-spacing: 2px; padding: 14px; cursor: pointer; transition: background 0.2s; }
+  .validate-btn:hover { background: #2a1e0c; }
+  .final-error { color: #a04030; font-size: 13px; font-style: italic; margin-top: 8px; min-height: 20px; }
+
+  #success { display: none; background: #0a0804; border: 1px solid #5a4a2a; padding: 32px; text-align: center; margin-top: 24px; }
+  .success-label { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #6a5a3a; margin-bottom: 20px; }
+  .success-msg { font-size: 16px; font-style: italic; color: #c4b590; line-height: 1.8; margin-bottom: 28px; }
+  .next-pwd-label { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #6a5a3a; margin-bottom: 12px; }
+  .next-pwd { font-family: 'Courier Prime', monospace; font-size: 28px; color: #e8c84a; letter-spacing: 4px; margin-bottom: 12px; }
+  .next-note { font-size: 13px; font-style: italic; color: #8a7a5a; }
+
+  .arch-footer { text-align: center; margin-top: 40px; padding-top: 24px; border-top: 1px solid #2a2010; font-size: 11px; letter-spacing: 2px; color: #3a3020; text-transform: uppercase; }
+</style>
+</head>
+<body>
+
+<div class="screen" id="lock-screen">
+  <p class="stamp">Archivo Aldana · Diario musical</p>
+  <div class="seal">♪</div>
+  <h1 class="heading">Las canciones del Atlántico</h1>
+  <p class="sub">El diario musical de Aldana está encriptado.<br>Necesitáis la clave del tangram para acceder.</p>
+  <input type="password" id="pwd" class="input-field" placeholder="clave del tangram" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+  <button class="btn" onclick="checkPwd()">ACCEDER AL DIARIO</button>
+  <p class="error" id="pwd-err"></p>
+  <p class="footer-lock">Diario musical · V. Aldana 1923</p>
+</div>
+
+<div id="archive">
+  <div class="arch-header">
+    <p class="stamp">Archivo Aldana · Diario musical · Acceso concedido</p>
+    <h1 class="arch-title">Las canciones del Atlántico</h1>
+    <p class="arch-sub">Cuatro canciones marcadas con estrella en el diario de Aldana</p>
+  </div>
+
+  <p class="intro">
+    "En cada puerto había música. Estas cuatro se me quedaron grabadas.
+    No sé exactamente por qué las marqué con una estrella, pero lo hice.
+    El año en que sonaron por primera vez está escondido en algún sitio."
+  </p>
+
+  <div class="song-row">
+    <p class="song-num">Canción nº 1</p>
+    <a class="song-link" href="https://open.spotify.com/track/7acHZsIcBIvBfd8bHcS5sc?si=KBf_s0CqRd6rRNf6MOfGAg" target="_blank">▶ Escuchar en Spotify</a>
+    <div class="year-row">
+      <span class="year-label">Año de lanzamiento:</span>
+      <input type="number" class="year-input" id="y1" placeholder="XXXX" min="1900" max="2030" oninput="checkYear(1, this.value, 2006)"/>
+      <span class="year-ok" id="ok1"></span>
+    </div>
+  </div>
+
+  <div class="song-row">
+    <p class="song-num">Canción nº 2</p>
+    <a class="song-link" href="https://open.spotify.com/track/01km0N5v4vhwqFyW4H1X0n?si=GgfLUq11Rq-DCPv1D3cPXw" target="_blank">▶ Escuchar en Spotify</a>
+    <div class="year-row">
+      <span class="year-label">Año de lanzamiento:</span>
+      <input type="number" class="year-input" id="y2" placeholder="XXXX" min="1900" max="2030" oninput="checkYear(2, this.value, 2014)"/>
+      <span class="year-ok" id="ok2"></span>
+    </div>
+  </div>
+
+  <div class="song-row">
+    <p class="song-num">Canción nº 3</p>
+    <a class="song-link" href="https://open.spotify.com/track/499YGo88eE9l7T4swVFlBM?si=ehTF6gnARESucEIGV0CNuw" target="_blank">▶ Escuchar en Spotify</a>
+    <div class="year-row">
+      <span class="year-label">Año de lanzamiento:</span>
+      <input type="number" class="year-input" id="y3" placeholder="XXXX" min="1900" max="2030" oninput="checkYear(3, this.value, 2008)"/>
+      <span class="year-ok" id="ok3"></span>
+    </div>
+  </div>
+
+  <div class="song-row">
+    <p class="song-num">Canción nº 4</p>
+    <a class="song-link" href="https://open.spotify.com/track/1vfrKhbb7p874HDJSRBTSf?si=qkfTg7KiT_iaqbhvqZBh9A" target="_blank">▶ Escuchar en Spotify</a>
+    <div class="year-row">
+      <span class="year-label">Año de lanzamiento:</span>
+      <input type="number" class="year-input" id="y4" placeholder="XXXX" min="1900" max="2030" oninput="checkYear(4, this.value, 2012)"/>
+      <span class="year-ok" id="ok4"></span>
+    </div>
+  </div>
+
+  <hr class="divider"/>
+
+  <div class="final-section">
+    <p class="final-label">Código final</p>
+    <p class="final-desc">
+      Tomad los dos últimos dígitos de cada año, en orden de las canciones.<br>
+      Introducidlos seguidos sin espacios:
+    </p>
+    <input type="text" class="final-input" id="final-code" placeholder="XXXXXXXX" maxlength="8" autocomplete="off" autocorrect="off" spellcheck="false"/>
+    <button class="validate-btn" onclick="validateFinal()">VALIDAR CÓDIGO</button>
+    <p class="final-error" id="final-err"></p>
+  </div>
+
+  <div id="success">
+    <p class="success-label">Código verificado · Acceso al siguiente nivel</p>
+    <p class="success-msg">
+      "Sabía que lo encontraríais. Esas canciones nunca mienten.<br>
+      El siguiente archivo espera vuestras órdenes."
+    </p>
+    <p class="next-pwd-label">Contraseña para la Prueba VII</p>
+    <p class="next-pwd">MAREAS</p>
+    <p class="next-note">Introducidla en la siguiente web para acceder al galeón de Aldana.</p>
+  </div>
+
+  <div class="arch-footer">
+    <p>Diario musical · Archivo Aldana 1923 · Acceso verificado</p>
+  </div>
+</div>
+
+<script>
+document.getElementById('pwd').addEventListener('keydown', e => { if (e.key === 'Enter') checkPwd(); });
+document.getElementById('final-code').addEventListener('keydown', e => { if (e.key === 'Enter') validateFinal(); });
+
+function checkPwd() {
+  const v = document.getElementById('pwd').value.trim().replace(/\s/g,'');
+  if (v === '2934186') {
+    document.getElementById('lock-screen').style.display = 'none';
+    document.getElementById('archive').style.display = 'block';
+    window.scrollTo(0,0);
+  } else {
+    document.getElementById('pwd-err').textContent = 'Clave incorrecta. Revisad los números del tangram.';
+    document.getElementById('pwd').value = '';
+  }
+}
+
+function checkYear(n, val, correct) {
+  const ok = document.getElementById('ok' + n);
+  if (parseInt(val) === correct) {
+    ok.textContent = '✓';
+    ok.style.color = '#4a9a4a';
+  } else if (val.length === 4) {
+    ok.textContent = '✗';
+    ok.style.color = '#a04030';
+  } else {
+    ok.textContent = '';
+  }
+}
+
+function validateFinal() {
+  const code = document.getElementById('final-code').value.trim();
+  const err = document.getElementById('final-err');
+  if (code === '06140812') {
+    document.getElementById('success').style.display = 'block';
+    document.getElementById('final-err').textContent = '';
+    document.getElementById('success').scrollIntoView({ behavior: 'smooth' });
+  } else if (code.length < 8) {
+    err.textContent = 'El código tiene 8 dígitos (2 por cada canción).';
+  } else {
+    err.textContent = 'Código incorrecto. Revisad los años de lanzamiento.';
+    document.getElementById('final-code').value = '';
+  }
+}
+</script>
+</body>
+</html>

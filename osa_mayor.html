@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Osa Mayor · Archivo Aldana</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Courier+Prime&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #1a1410; color: #d4c5a0; font-family: 'IM Fell English', Georgia, serif; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
+  .screen { max-width: 500px; width: 100%; text-align: center; }
+  .stamp { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #6a5a3a; margin-bottom: 32px; }
+  .seal { width: 80px; height: 80px; border: 2px solid #5a4a2a; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 32px; font-size: 32px; }
+  .heading { font-size: 26px; color: #e8d8a0; margin-bottom: 8px; }
+  .sub { font-size: 15px; font-style: italic; color: #8a7a5a; margin-bottom: 40px; line-height: 1.7; }
+  .input-field { width: 100%; background: #0e0c09; border: 1px solid #5a4a2a; color: #e8d8a0; font-family: 'Courier Prime', monospace; font-size: 18px; letter-spacing: 4px; text-align: center; text-transform: uppercase; padding: 14px 20px; outline: none; margin-bottom: 16px; }
+  .input-field:focus { border-color: #a08040; }
+  .btn { width: 100%; background: #2a2010; border: 1px solid #5a4a2a; color: #d4c5a0; font-family: 'IM Fell English', Georgia, serif; font-size: 15px; letter-spacing: 2px; padding: 12px; cursor: pointer; transition: background 0.2s; }
+  .btn:hover { background: #3a3020; border-color: #a08040; }
+  .error { color: #a04030; font-size: 13px; font-style: italic; margin-top: 12px; min-height: 20px; }
+  .footer { margin-top: 48px; font-size: 11px; letter-spacing: 2px; color: #3a3020; text-transform: uppercase; }
+
+  #archive { display: none; max-width: 600px; width: 100%; }
+  .arch-header { text-align: center; border-bottom: 1px solid #3a3020; padding-bottom: 28px; margin-bottom: 32px; }
+  .arch-title { font-size: 28px; color: #e8d8a0; margin-bottom: 8px; }
+  .arch-sub { font-size: 14px; font-style: italic; color: #8a7a5a; }
+  .arch-text { font-size: 15px; font-style: italic; color: #c4b590; line-height: 1.8; margin-bottom: 24px; }
+  .legend { background: #0e0c09; border: 1px solid #3a2a1a; padding: 16px 20px; margin: 24px 0; }
+  .legend p { font-size: 13px; color: #8a7a5a; line-height: 1.8; font-style: italic; }
+  .legend strong { color: #e8c84a; font-style: normal; }
+  .ship-wrap { background: #0a0804; border: 1px solid #5a4a2a; padding: 24px; margin: 24px 0; display: flex; justify-content: center; }
+  .code-reveal { background: #0e0c09; border: 1px solid #5a4a2a; padding: 28px; text-align: center; margin-top: 24px; }
+  .code-label { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #6a5a3a; margin-bottom: 16px; }
+  .code-value { font-family: 'Courier Prime', monospace; font-size: 36px; color: #e8c84a; letter-spacing: 6px; margin-bottom: 16px; }
+  .code-note { font-size: 13px; font-style: italic; color: #8a7a5a; line-height: 1.7; }
+  .arch-footer { text-align: center; margin-top: 40px; padding-top: 24px; border-top: 1px solid #2a2010; font-size: 11px; letter-spacing: 2px; color: #3a3020; text-transform: uppercase; }
+</style>
+</head>
+<body>
+
+<div class="screen" id="lock-screen">
+  <p class="stamp">Archivo Aldana · Carta de navegación secreta</p>
+  <div class="seal">⚓</div>
+  <h1 class="heading">La Osa Mayor</h1>
+  <p class="sub">Este archivo contiene la solución al puzzle del navegante.<br>Solo el que haya completado el tangram puede acceder.</p>
+  <input type="password" id="pwd" class="input-field" placeholder="contraseña" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+  <button class="btn" onclick="check()">ACCEDER</button>
+  <p class="error" id="err"></p>
+  <p class="footer">Carta de navegación nº VII · V. Aldana 1923</p>
+</div>
+
+<div id="archive">
+  <div class="arch-header">
+    <p class="stamp">Archivo Aldana · Solución del tangram · Confidencial</p>
+    <h1 class="arch-title">El navío de Aldana</h1>
+    <p class="arch-sub">Silueta del bergantín "Los Dos Mares" · Reconstrucción 1923</p>
+  </div>
+
+  <p class="arch-text">
+    "Este era mi barco. Siete piezas, como los siete mares que cruzamos juntos.
+    He grabado un número en cada una. Leedlos en el orden que indican las estrellas doradas."
+  </p>
+
+  <div class="legend">
+    <p>Cada pieza tiene su <strong>dígito</strong> (número grande) y su <strong>número de secuencia</strong> (círculo dorado).<br>
+    Leed los dígitos en el orden que marca la secuencia: ① primero, ② segundo... hasta ⑦.<br>
+    Los 7 dígitos en ese orden forman la clave para la siguiente prueba.</p>
+  </div>
+
+  <div class="ship-wrap">
+    <svg viewBox="0 0 450 440" xmlns="http://www.w3.org/2000/svg" width="100%" style="max-width:420px">
+      <polygon points="225,30 45,225 225,225" fill="#E8E0D0" stroke="#222" stroke-width="2.5"/>
+      <text x="165" y="148" text-anchor="middle" dominant-baseline="central" font-family="Courier New" font-size="32" font-weight="bold" fill="#111">3</text>
+      <circle cx="165" cy="178" r="13" fill="#1a1a1a" stroke="#e8c84a" stroke-width="1.5"/>
+      <text x="165" y="178" text-anchor="middle" dominant-baseline="central" font-family="Arial" font-size="13" font-weight="bold" fill="#E8C84A">③</text>
+
+      <polygon points="225,30 225,225 405,225" fill="#D8E8E0" stroke="#222" stroke-width="2.5"/>
+      <text x="285" y="148" text-anchor="middle" dominant-baseline="central" font-family="Courier New" font-size="32" font-weight="bold" fill="#111">8</text>
+      <circle cx="285" cy="178" r="13" fill="#1a1a1a" stroke="#e8c84a" stroke-width="1.5"/>
+      <text x="285" y="178" text-anchor="middle" dominant-baseline="central" font-family="Arial" font-size="13" font-weight="bold" fill="#E8C84A">⑥</text>
+
+      <polygon points="45,225 405,225 375,277 75,277" fill="#E0D8E8" stroke="#222" stroke-width="2.5"/>
+      <text x="225" y="243" text-anchor="middle" dominant-baseline="central" font-family="Courier New" font-size="28" font-weight="bold" fill="#111">1</text>
+      <circle cx="225" cy="265" r="13" fill="#1a1a1a" stroke="#e8c84a" stroke-width="1.5"/>
+      <text x="225" y="265" text-anchor="middle" dominant-baseline="central" font-family="Arial" font-size="13" font-weight="bold" fill="#E8C84A">⑤</text>
+
+      <polygon points="75,277 195,277 195,360 90,360" fill="#E8E8D0" stroke="#222" stroke-width="2.5"/>
+      <text x="138" y="306" text-anchor="middle" dominant-baseline="central" font-family="Courier New" font-size="28" font-weight="bold" fill="#111">6</text>
+      <circle cx="138" cy="334" r="13" fill="#1a1a1a" stroke="#e8c84a" stroke-width="1.5"/>
+      <text x="138" y="334" text-anchor="middle" dominant-baseline="central" font-family="Arial" font-size="13" font-weight="bold" fill="#E8C84A">⑦</text>
+
+      <polygon points="195,277 255,277 255,360 195,360" fill="#D0E8E8" stroke="#222" stroke-width="2.5"/>
+      <text x="225" y="306" text-anchor="middle" dominant-baseline="central" font-family="Courier New" font-size="28" font-weight="bold" fill="#111">4</text>
+      <circle cx="225" cy="334" r="13" fill="#1a1a1a" stroke="#e8c84a" stroke-width="1.5"/>
+      <text x="225" y="334" text-anchor="middle" dominant-baseline="central" font-family="Arial" font-size="13" font-weight="bold" fill="#E8C84A">④</text>
+
+      <polygon points="255,277 375,277 360,360 255,360" fill="#E8D0D8" stroke="#222" stroke-width="2.5"/>
+      <text x="310" y="306" text-anchor="middle" dominant-baseline="central" font-family="Courier New" font-size="28" font-weight="bold" fill="#111">9</text>
+      <circle cx="310" cy="334" r="13" fill="#1a1a1a" stroke="#e8c84a" stroke-width="1.5"/>
+      <text x="310" y="334" text-anchor="middle" dominant-baseline="central" font-family="Arial" font-size="13" font-weight="bold" fill="#E8C84A">②</text>
+
+      <polygon points="90,360 360,360 225,412" fill="#D8D0E8" stroke="#222" stroke-width="2.5"/>
+      <text x="225" y="371" text-anchor="middle" dominant-baseline="central" font-family="Courier New" font-size="26" font-weight="bold" fill="#111">2</text>
+      <circle cx="225" cy="393" r="13" fill="#1a1a1a" stroke="#e8c84a" stroke-width="1.5"/>
+      <text x="225" y="393" text-anchor="middle" dominant-baseline="central" font-family="Arial" font-size="13" font-weight="bold" fill="#E8C84A">①</text>
+    </svg>
+  </div>
+
+  <div class="code-reveal">
+    <p class="code-label">Secuencia de lectura ①→②→③→④→⑤→⑥→⑦</p>
+    <p class="code-value">2 9 3 4 1 8 6</p>
+    <p class="code-note">
+      Estos 7 dígitos en orden son la contraseña para la Prueba VI.<br>
+      Introducidlos sin espacios: <strong style="color:#e8c84a; font-style:normal; font-family:'Courier Prime',monospace">2934186</strong>
+    </p>
+  </div>
+
+  <div class="arch-footer">
+    <p>Carta de navegación nº VII · Archivo Aldana 1923 · Acceso verificado</p>
+  </div>
+</div>
+
+<script>
+document.getElementById('pwd').addEventListener('keydown', e => { if (e.key === 'Enter') check(); });
+function check() {
+  const v = document.getElementById('pwd').value.trim().toUpperCase().replace(/\s+/g,' ');
+  if (v === 'LA OSA MAYOR' || v === 'LAOSAMAYOR' || v === 'OSA MAYOR') {
+    document.getElementById('lock-screen').style.display = 'none';
+    document.getElementById('archive').style.display = 'block';
+    window.scrollTo(0,0);
+  } else {
+    document.getElementById('err').textContent = 'Contraseña incorrecta. La pista llegó por SMS.';
+    document.getElementById('pwd').value = '';
+  }
+}
+</script>
+</body>
+</html>
